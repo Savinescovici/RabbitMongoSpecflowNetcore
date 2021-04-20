@@ -6,7 +6,6 @@ COPY *.sln .
 COPY publisher_api/*.csproj ./publisher_api/
 COPY publisher_api.Specs/*.csproj ./publisher_api.Specs/
 COPY rabbit/*.csproj ./rabbit/
-COPY worker/*.csproj ./worker/
 COPY consumer_api/*.csproj ./consumer_api/
 RUN dotnet restore
 
