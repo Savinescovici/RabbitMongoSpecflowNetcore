@@ -1,0 +1,44 @@
+version: '3.4'
+
+services:
+  publisher_api:
+    build:
+        context: ./
+        dockerfile: ./publisher_api/Dockerfile
+    ports: 
+    - "8080:80"
+    restart: always
+
+  consumer_api:
+    build:
+        context: ./
+        dockerfile: ./consumer_api/Dockerfile
+    restart: always
+    depends_on:
+      - "publisher_api"
+      - "rabbitmq"
+
+  rabbitmq: # login guest:guest
+    image: rabbitmq:3-management
+    hostname: "rabbitmq"
+    labels:
+      NAME: "rabbitmq"
+    ports:
+    - "4369:4369"
+    - "5671:5671"
+    - "5672:5672"
+    - "25672:25672"
+    - "15671:15671"
+    - "15672:15672"
+    
+  mongodb_container:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+volumes:
+  mongodb_data_container:
