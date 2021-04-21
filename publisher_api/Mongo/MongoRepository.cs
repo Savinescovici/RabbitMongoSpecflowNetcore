@@ -1,7 +1,5 @@
 ﻿using MongoDB.Driver;
-using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -35,9 +33,9 @@ namespace publisher_api.Mongo
             return await (await _collection.FindAsync(filter, new FindOptions<T, T> { Sort = sort }, token)).ToListAsync();
         }
 
-        public async Task<T> FindAsync(FilterDefinition<T> filter, SortDefinition<T> sort = default, CancellationToken token = default)
+        public async Task<T> FindAsync(FilterDefinition<T> filter, CancellationToken token = default)
         {
-            return await (await _collection.FindAsync(filter, new FindOptions<T, T> { Sort = sort }, token)).FirstOrDefaultAsync();
+            return await (await _collection.FindAsync(filter, null, token)).FirstOrDefaultAsync();
         }
 
         public async Task UpdateAsync(FilterDefinition<T> filter, UpdateDefinition<T> update)
@@ -50,9 +48,5 @@ namespace publisher_api.Mongo
             await _collection.DeleteOneAsync(filter);
         }
 
-        public Task<T> FindAsync(FilterDefinition<T> filter, CancellationToken token = default)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
